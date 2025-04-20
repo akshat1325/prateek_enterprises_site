@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details - Prateek Enterprises</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <header>
+    <h1>Prateek Enterprises</h1>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="product.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="product-detail" id="product-detail">
+    <!-- Product content loaded via JS -->
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Prateek Enterprises. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("id");
+
+    fetch(`http://localhost:5000/api/products/${productId}`)
+      .then(res => res.json())
+      .then(prod => {
+        const detail = document.getElementById("product-detail");
+        detail.innerHTML = `
+          <div style="padding: 2rem; text-align: center;">
+            <img src="${prod.image_url}" alt="${prod.name}" style="max-width: 300px; border-radius: 10px;"/>
+            <h2>${prod.name}</h2>
+            <p>${prod.description}</p>
+            <h3>₹${prod.price}</h3>
+            <button onclick="addToCart(${prod.id})" class="btn">Add to Cart</button>
+          </div>
+        `;
+      });
+
+    function addToCart(id) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let item = cart.find(p => p.id === id);
+      if (item) {
+        item.qty += 1;
+      } else {
+        cart.push({ id, qty: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
+    }
+  </script>
+</body>
+</html>

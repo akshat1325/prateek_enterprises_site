@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prateek Enterprises</title>
+  <link rel="stylesheet" href="home.css" />
+</head>
+<body>
+  <header>
+    <h1>Prateek Enterprises</h1>
+    <nav>
+      <ul>
+        <li><a href="home.html">Home</a></li>
+        <li><a href="product.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Welcome to Prateek Enterprises</h2>
+    <p>Your one-stop shop for quality consumer goods</p>
+    <a href="products.html" class="btn">Shop Now</a>
+  </section>
+
+  <section class="featured-products">
+    <h2>Featured Products</h2>
+    <div class="product-grid" id="featured-products">
+      <!-- Products will be loaded via JS -->
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Prateek Enterprises. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Example JavaScript to load featured products
+    fetch('http://localhost:5000/api/products')
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById('featured-products');
+        data.slice(0, 4).forEach(prod => {
+          const div = document.createElement('div');
+          div.className = 'product';
+          div.innerHTML = `
+            <img src="${prod.image_url}" alt="${prod.name}" />
+            <h3>${prod.name}</h3>
+            <p>₹${prod.price}</p>
+            <a href="product.html?id=${prod.id}" class="btn">View</a>
+          `;
+          container.appendChild(div);
+        });
+      });
+  </script>
+</body>
+</html>
